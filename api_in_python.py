@@ -10,17 +10,17 @@ import time
 from time import sleep
 
 
-def check_in_file(di):#to check that I haven't sent the same place for the same date before
+def check_in_file(di):
     f=open("alreadysent.csv","a+")
     f.seek(0)
     l=set(f.readlines())
     print(l)
     fin=[]
     for i in di:
-        if i["date"]+","+i["Name"]+"\n" not in l:
+        if i["date"]+","+i["Name"]+","+str(i["1st dose capacity"])+"\n" not in l:
             fin.append(i)
     for i in range(len(fin)):
-        f.write(fin[i]["date"]+","+fin[i]["Name"]+"\n")
+        f.write(fin[i]["date"]+","+fin[i]["Name"]+","+str(fin[i]["1st dose capacity"])+"\n")
         fin[i]=str(fin[i])
     f.close()
     #print(fin)
@@ -73,20 +73,19 @@ t=date.today()#+timedelta(days=1)
 k=time.localtime()
 if k.tm_hour>=17:
     t=t+timedelta(days=1)
-t=t.strftime("%d-%m-%Y")
-print(t)
+#print(t)
 
-params1={"district_id":294,"date":t}#for BBMP
-params2={"district_id":265,"date":t}#for Bangalore Urban
+#params1={"district_id":294,"date":t}
+params2={"district_id":265,"date":t}
 keyval=0
 headers={"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 Edg/90.0.818.51"}
-flag=2
+flag=7
 di=[]
 while(flag):
-    if keyval:
-        response=requests.get("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict",headers=headers,params=params2)
-    else:
-        response=requests.get("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict",headers=headers,params=params1)
+    f=t.strftime("%d-%m-%Y")
+    print(f)
+    params2={"district_id":265,"date":f}
+    response=requests.get("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict",headers=headers,params=params2)
     print(response)
     final=response.json()
     #print(final)
@@ -94,13 +93,14 @@ while(flag):
     if final["sessions"]:
         vals=0
         for i in final["sessions"]:
-            if i['available_capacity'] and i['min_age_limit']==18:
+            if i['available_capacity_dose1'] and i['min_age_limit']==18:
                 if vals:
                     di.append(({"date":t,"Name":i['name'],"1st dose capacity":i['available_capacity_dose1'],"2nd dose capacity":i['available_capacity_dose2'],"Address":i['address'],"Fees":i['fee'],"Vaccine":i["vaccine"]}))
                 else:
                     di.append(({"date":t,"Name":i['name'],"1st dose capacity":i['available_capacity_dose1'],"2nd dose capacity":i['available_capacity_dose2'],"Address":i['address'],"Fees":i['fee'],"Vaccine":i["vaccine"]}))
                 vals^=1
         #print(di)
+    t=t+timedelta(days=1)
     flag-=1
     sleep(1)
     keyval^=1
