@@ -1,2 +1,2 @@
 # Vaccine_notifier
-Notifies me when a COVID vaccine is available.
+Notifies when a COVID-19 vaccine (specifically COVAXIN) is available.
