@@ -30,23 +30,30 @@ while(True):
         response=requests.get("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict",headers=headers,params=params2)
         print(response)
         final=response.json()
-        #print(final)
         try:
             if final["sessions"]:
                 for i in final["sessions"]:
-                        if  i["vaccine"]=="COVAXIN" and i['available_capacity_dose1'] and i['min_age_limit']==18 :
-                            print(i["name"],i["pincode"])
+                        if i['available_capacity_dose1'] and i["vaccine"]=="COVAXIN" and i['min_age_limit']==18 :
+                            print(i["name"],i["pincode"],i['available_capacity_dose1'])
                             engine.say((i["name"],i['available_capacity_dose1']))
                             engine.runAndWait()
-                            di.append(({"P":i["pincode"],"D":f,"N":i['name'],"Cap":i['available_capacity_dose1'],"Add":i['address'],"F":i['fee'],"V":i["vaccine"],"S":i["session_id"],"sl":i["slots"]}))
+                            winsound.Beep(750,800)    
+                            di.append(({"D":f,"N":i['name'],"Cap":str(i['available_capacity_dose1']),"Add":i['address'],"F":i['fee'],"V":str(i["vaccine"]),"S":i["session_id"],"sl":i["slots"]}))
+                            print(di[-1])
                     #print(di)
         except:
+            engine.say("ERROR")
+            engine.runAndWait()
             winsound.Beep(600,800)
         t=t+timedelta(days=1)
         flag-=1
     if di:
-            di=check_in_file(di)
-            if di:
-                winsound.Beep(600,800)
-    sleep(15)
+        fi=open("alreadysent.csv","a")
+        for i in di:
+            fi.write(f+","+i["N"]+","+i["Cap"]+","+i["V"]+"\n")
+        fi.close()
+        winsound.Beep(600,800)
+    sleep(12)
+engine.say("LOOP OVER")
+engine.runAndWait()
 winsound.Beep(600,800)
