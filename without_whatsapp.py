@@ -27,7 +27,13 @@ while(True):
         f=t.strftime("%d-%m-%Y")
         print(f)
         params2={"district_id":294,"date":f}
-        response=requests.get("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict",headers=headers,params=params2)
+        try:
+            response=requests.get("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict",headers=headers,params=params2,timeout=10)
+        except Exception as E:
+            engine.say(str(E))
+            engine.runAndWait()
+            sleep(10)
+            break
         print(response)
         final=response.json()
         try:
