@@ -1,5 +1,5 @@
 # Vaccine Notifier
-Notifies when a Covid-19 vaccine is available. Currently, it sends a notification when COVAXIN is available.
+Notifies when a Covid-19 vaccine is available. Currently, it sends a notification (rather, makes a beep sound)  when COVAXIN is available.
 
 * Based on the user's requirements, he/she can be notified about the vaccine of their choice.
 * Text to Speech has been added for ease of use.
@@ -19,9 +19,10 @@ virtualenv env
 pip install -r requirements.tct
 ```
 
-3. Run the following command.
+3. Run the following command. (The program should be allowed to run in the background)
 ```bash
-python .\<File_name>.py
+python .\without_whatsapp.py # for the first dose
+python .\dose_2.py # for the second dose
 ```
 
 Works for Windows systems because of the use of 'winsound'. Replace by printing the bell character instead.
