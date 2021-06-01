@@ -25,3 +25,10 @@ python .\<File_name>.py
 ```
 
 Works for Windows systems because of the use of 'winsound'. Replace by printing the bell character instead.
+
+Note:
+
+Works only for BBMP district(district id: 294). To use for other states/districts:
+1)Use [api-setu's state id API]("https://apisetu.gov.in/public/api/cowin#/Metadata%20APIs/states").
+2)Get the id of your state and use that for [api-setu's district id API]("https://apisetu.gov.in/public/api/cowin#/Metadata%20APIs/districts").
+3)Replace the district id in the code: with the required district's id.
