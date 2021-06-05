@@ -16,7 +16,7 @@ git clone https://github.com/sreyansb/Vaccine_notifier.git
 cd Vaccine_notifier
 virtualenv env
 .\env\Scripts\activate
-pip install -r requirements.tct
+pip install -r requirements.txt
 ```
 
 3. Run the following command. (The program should be allowed to run in the background)
